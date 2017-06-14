@@ -22,9 +22,8 @@ $app->before(function (Request $request) {
 
 $app->post('/', function(Request $request) use ($app) {
   $hook = new \Issue\Hook($app, $request);
-  if ($hook->isValid()) {
-    return $hook->process();
-  }
+  $hook->process();
+  return 'Done';
 });
 
 $app->run();
