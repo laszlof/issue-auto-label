@@ -74,6 +74,6 @@ class Hook {
    */
   public function process() {
     $this->_app['monolog']->addDebug($this->_getData());
-    // return var_export($this->_getData(), true);
+    return var_export($this->_getData(), true);
   }
 }
