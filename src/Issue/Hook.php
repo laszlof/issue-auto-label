@@ -31,6 +31,12 @@ class Hook {
   private $_secret = '';
 
   /**
+   * Github label to apply to issue
+   * @var string
+   */
+  private $_label = '';
+
+  /**
    * Raw data from hook request
    * @var string
    */
@@ -41,6 +47,7 @@ class Hook {
     $this->_request = $request;
     $this->_api_token = getenv('API_TOKEN');
     $this->_secret = getenv('SECRET');
+    $this->_label = getenv('GITHUB_LABEL');
     $this->_raw_data = $request->getContent();
   }
 
@@ -52,15 +59,8 @@ class Hook {
   public function isValid() : bool {
     $event = $this->_request->headers->get('X-Github-Event');
     $signature = $this->_request->headers->get('X-Hub-Signature');
-    $this->_app['monolog']->addDebug($event);
-    $this->_app['monolog']->addDebug($signature);
     list($algo, $sig) = explode('=', $signature);
-    $this->_app['monolog']->addDebug($algo);
-    $this->_app['monolog']->addDebug($sig);
-    $this->_app['monolog']->addDebug($this->_secret);
-
     $hash = hash_hmac($algo, $this->_raw_data, $this->_secret);
-    $this->_app['monolog']->addDebug($this->_secret);
 
     return $hash === $sig;
   }
@@ -80,10 +80,6 @@ class Hook {
    * @return void
    */
   public function process() {
-    if ($this->isValid()) {
-      $this->_app['monolog']->addDebug('IS VALID');
-    } else {
-      $this->_app['monolog']->addDebug('IS NOT VALID');
-    }
+    $this->_app['monolog']->addDebug($this->_raw_data);
   }
 }
