@@ -2,6 +2,8 @@
 
 namespace Issue;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class Hook {
 
   /**
@@ -9,6 +11,12 @@ class Hook {
    * @var \Silex\application
    */
   private $_app;
+
+  /**
+   * Our Request object
+   * @var Symfony\Component\HttpFoundation\Request
+   */
+  private $_request;
 
   /**
    * Github API Token
@@ -28,11 +36,12 @@ class Hook {
    */
   private $_raw_data = '';
 
-  public function __construct(\Silex\Application $app) {
+  public function __construct(\Silex\Application $app, Request $request) {
     $this->_app = $app;
+    $this->_request = $request;
     $this->_api_token = getenv('API_TOKEN');
     $this->_secret = getenv('SECRET');
-    $this->_raw_data = file_get_contents('php://input');
+    $this->_raw_data = $request->getContent();
   }
 
   /**
