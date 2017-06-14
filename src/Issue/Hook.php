@@ -5,6 +5,12 @@ namespace Issue;
 class Hook {
 
   /**
+   * Our Silex application
+   * @var \Silex\application
+   */
+  private $_app;
+
+  /**
    * Github API Token
    * @var string
    */
@@ -22,7 +28,8 @@ class Hook {
    */
   private $_raw_data = '';
 
-  public function __construct() {
+  public function __construct(\Silex\Application $app) {
+    $this->_app = $app;
     $this->_api_token = getenv('API_TOKEN');
     $this->_secret = getenv('SECRET');
     $this->_raw_data = file_get_contents('php://input');
@@ -57,6 +64,7 @@ class Hook {
    * @return void
    */
   public function process() {
-    return var_export($this->_getData(), true);
+    $this->_app['monolog']->addDebug($this->_getData());
+    // return var_export($this->_getData(), true);
   }
 }

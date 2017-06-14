@@ -4,6 +4,7 @@
     "type": "project",
     "require": {
         "knplabs/github-api": "^2.4",
+        "monolog/monolog": "^1.22",
         "silex/silex": "^2.0.4",
         "monolog/monolog": "^1.22",
         "php-http/guzzle6-adapter": "^1.1"
