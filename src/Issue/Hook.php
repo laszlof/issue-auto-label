@@ -50,10 +50,17 @@ class Hook {
    * @return boolean
    */
   public function isValid() : bool {
-    $event = $_SERVER['X-Github-Event'];
-    $signature = $_SERVER['X-Hub-Signature'];
+    $event = $this->_request->headers->get('X-Github-Event');
+    $signature = $this->_request->headers->get('X-Hub-Signature');
+    $this->_app['monolog']->addDebug($event);
+    $this->_app['monolog']->addDebug($signature);
     list($algo, $sig) = explode('=', $signature);
+    $this->_app['monolog']->addDebug($algo);
+    $this->_app['monolog']->addDebug($sig);
+    $this->_app['monolog']->addDebug($this->_secret);
+
     $hash = hash_hmac($algo, $this->_raw_data, $this->_secret);
+    $this->_app['monolog']->addDebug($this->_secret);
 
     return $hash === $sig;
   }
@@ -73,6 +80,10 @@ class Hook {
    * @return void
    */
   public function process() {
-    $this->_app['monolog']->addDebug(var_export($this->_getData(), true));
+    if ($this->isValid()) {
+      $this->_app['monolog']->addDebug('IS VALID');
+    } else {
+      $this->_app['monolog']->addDebug('IS NOT VALID');
+    }
   }
 }
