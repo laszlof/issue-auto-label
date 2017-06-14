@@ -14,15 +14,15 @@ class Hook {
 
   /**
    * Our Request object
-   * @var Symfony\Component\HttpFoundation\Request
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   private $_request;
 
   /**
-   * Github API Token
-   * @var string
+   * Our github client
+   * @var \Github\Client
    */
-  private $_api_token = '';
+  private $_github;
 
   /**
    * Github Webhook Secret
@@ -42,10 +42,18 @@ class Hook {
    */
   private $_raw_data = '';
 
+  /**
+   * Regex to match issue links
+   * @var string
+   */
+  const ISSUE_REGEX = '/(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\shttps:\/\/github.com\/(\w+)\/(\w+)\/issues\/([0-9]+)/i';
+
   public function __construct(\Silex\Application $app, Request $request) {
     $this->_app = $app;
     $this->_request = $request;
-    $this->_api_token = getenv('API_TOKEN');
+    $token = getenv('API_TOKEN');
+    $this->_github = new \Github\Client();
+    $this->_github->authenticate($token, \Github\Client::AUTH_HTTP_TOKEN);
     $this->_secret = getenv('SECRET');
     $this->_label = getenv('GITHUB_LABEL');
     $this->_raw_data = $request->getContent();
@@ -82,7 +90,16 @@ class Hook {
   public function process() {
     if ($this->_getData()->action === 'opened') {
       $body = $this->_getData()->pull_request->body;
-      $this->_app['monolog']->addDebug($body);
+      preg_match_all(self::ISSUE_REGEX, $body, $matches, PREG_SET_ORDER);
+      if ($matches) {
+        foreach ($matches as $m) {
+          $user = $m[1];
+          $repo = $m[2];
+          $issue_id = $m[3];
+          $r = $this->_github->api('issue')->labels()->add($user, $repo, $issue_id, $this->_label);
+          $this->_app['monolog']->addDebug(var_export($r, true));
+        }
+      }
     }
   }
 }
