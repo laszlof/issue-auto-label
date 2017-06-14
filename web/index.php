@@ -11,7 +11,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 ));
 
 
-$app->get('/', function() use ($app) {
+$app->post('/', function() use ($app) {
   $hook = new \Issue\Hook($app);
   if ($hook->isValid()) {
     return $hook->process();
