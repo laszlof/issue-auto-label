@@ -1,0 +1,6 @@
+{
+  "name": "Github Issue auto-tagger",
+  "description": "An application that automatically tags github issues that are PRd",
+  "repository": "https://github.com/laszlof/issue-hook",
+  "addons": []
+}
