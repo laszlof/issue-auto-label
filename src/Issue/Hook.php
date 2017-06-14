@@ -2,7 +2,9 @@
 
 namespace Issue;
 
-use Symfony\Component\HttpFoundation\Request;
+use \Symfony\Component\HttpFoundation\Request;
+use \Silex\Application;
+use \Github\Client as Client;
 
 class Hook {
 
@@ -48,12 +50,12 @@ class Hook {
    */
   const ISSUE_REGEX = '/(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\shttps:\/\/github.com\/(\w+)\/(\w+)\/issues\/([0-9]+)/i';
 
-  public function __construct(\Silex\Application $app, Request $request) {
+  public function __construct(Application $app, Request $request) {
     $this->_app = $app;
     $this->_request = $request;
     $token = getenv('API_TOKEN');
-    $this->_github = new \Github\Client();
-    $this->_github->authenticate($token, \Github\Client::AUTH_HTTP_TOKEN);
+    $this->_github = new Client();
+    $this->_github->authenticate($token, Client::AUTH_HTTP_TOKEN);
     $this->_secret = getenv('SECRET');
     $this->_label = getenv('GITHUB_LABEL');
     $this->_raw_data = $request->getContent();
