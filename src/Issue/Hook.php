@@ -33,7 +33,7 @@ class Hook {
    *
    * @return boolean
    */
-  public function isValid() {
+  public function isValid() : bool {
     $event = $_SERVER['X-Github-Event'];
     $signature = $_SERVER['X-Hub-Signature'];
     list($algo, $sig) = explode('=', $signature);
@@ -47,7 +47,16 @@ class Hook {
    *
    * @return \stdClass
    */
-  private function _getData() {
+  private function _getData() : \stdClass {
     return json_decode($this->_raw_data);
+  }
+
+  /**
+   * Process our webhook data
+   *
+   * @return void
+   */
+  public function process() {
+    return var_export($this->_getData(), true);
   }
 }

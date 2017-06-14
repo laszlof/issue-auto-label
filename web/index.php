@@ -7,7 +7,10 @@ $app['debug'] = true;
 
 
 $app->get('/', function() use ($app) {
-  return 'Hello World';
+  $hook = new \Issue\Hook();
+  if ($hook->isValid()) {
+    return $hook->process();
+  }
 });
 
 $app->run();
