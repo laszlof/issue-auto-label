@@ -96,8 +96,8 @@ class Hook {
           $user = $m[1];
           $repo = $m[2];
           $issue_id = $m[3];
-          $r = $this->_github->api('issue')->labels()->add($user, $repo, $issue_id, $this->_label);
-          $this->_app['monolog']->addDebug(var_export($r, true));
+          $r = $this->_github->api('issue')->labels()
+            ->add($user, $repo, $issue_id, $this->_label);
         }
       }
     }
