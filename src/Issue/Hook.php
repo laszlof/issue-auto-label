@@ -80,6 +80,9 @@ class Hook {
    * @return void
    */
   public function process() {
-    $this->_app['monolog']->addDebug($this->_raw_data);
+    if ($this->_getData()->action === 'opened') {
+      $body = $this->_getData()->pull_request->body;
+      $this->_app['monolog']->addDebug($body);
+    }
   }
 }
