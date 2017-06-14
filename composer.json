@@ -5,7 +5,7 @@
     "require": {
         "knplabs/github-api": "^2.4",
         "silex/silex": "^2.0.4",
-        "monolog/monolog": "^1.22",
+        "monolog/monolog": "^1.22"
     },
     "require-dev": {
       "heroku/heroku-buildpack-php": "*"
