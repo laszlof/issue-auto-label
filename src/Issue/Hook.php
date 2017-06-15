@@ -10,7 +10,7 @@ class Hook {
 
   /**
    * Our Silex application
-   * @var \Silex\application
+   * @var \Silex\Application
    */
   private $_app;
 
@@ -50,6 +50,12 @@ class Hook {
    */
   const ISSUE_REGEX = '/(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\shttps:\/\/github.com\/(\w+)\/(\w+)\/issues\/([0-9]+)/i';
 
+  /**
+   * Construct this object
+   *
+   * @param \Silex\Application $app
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   */
   public function __construct(Application $app, Request $request) {
     $this->_app = $app;
     $this->_request = $request;

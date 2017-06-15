@@ -8,13 +8,14 @@ use \Silex\Provider\MonologServiceProvider;
 use \Issue\Hook;
 
 $app = new Application();
-$app['debug'] = true;
+$app['debug'] = false;
 
 // Register the monolog logging service
 $app->register(new MonologServiceProvider(), array(
   'monolog.logfile' => 'php://stderr',
 ));
 
+// Handle the post request
 $app->post('/', function(Request $request) use ($app) {
   $hook = new Hook($app, $request);
   if ($hook->isValid()) {

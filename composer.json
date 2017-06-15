@@ -1,6 +1,6 @@
 {
-    "name": "laszlof/issue-hook",
-    "description": "Webhook handler for Github",
+    "name": "laszlof/issue-auto-label",
+    "description": "Webhook handler auto-labeling issues that have been PR'd",
     "type": "project",
     "require": {
         "knplabs/github-api": "^2.4",
